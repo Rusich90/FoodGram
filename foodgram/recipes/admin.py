@@ -24,7 +24,7 @@ class RecipeIngredientAdmin(admin.ModelAdmin):
 
 class RecipeAdmin(admin.ModelAdmin):
     list_display = ('pk', 'title', 'author', 'tag',
-                    'cooking_time', 'pub_date', 'ingredients')
+                    'cooking_time', 'pub_date',)
     search_fields = ('title',)
     list_filter = ('pub_date',)
     empty_value_display = '-пусто-'
