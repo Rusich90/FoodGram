@@ -5,4 +5,4 @@ from .models import Recipe
 
 class IndexView(ListView):
     model = Recipe
-    template_name = 'indexNotAuth.html'
+    template_name = 'singlePage.html'
