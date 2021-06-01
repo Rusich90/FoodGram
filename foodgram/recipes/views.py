@@ -5,4 +5,5 @@ from .models import Recipe
 
 class IndexView(ListView):
     model = Recipe
-    template_name = 'singlePage.html'
+    template_name = 'signup.html'
+    paginate_by = 6
