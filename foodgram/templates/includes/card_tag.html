@@ -1,0 +1,12 @@
+{% load recipe_filters %}
+<ul class="tags">
+    {% for tag in tag_list %}
+        <li class="tags__item">
+            <a id="{{ tag.display_name }}" class="tags__checkbox tags__checkbox_style_{{ tag.color }}
+                {% if tag.display_name in request.GET|parse_tags %}tags__checkbox_active{% endif %}"
+                href="{{ request.path }}?{{ request|set_tag_qs:tag }}">
+            </a>
+            <span for="{{ tag.display_name }}" class="tags__label">{{ tag.title }}</span>
+        </li>
+    {% endfor %}
+</ul>
