@@ -3,7 +3,7 @@
         <li class="tags__item">
             <a id="{{ tag.title }}" class="tags__checkbox tags__checkbox_style_{{ tag.color }}
                 {% if tag.title in request.GET %}tags__checkbox_active{% endif %}"
-                href="*">
+                href="{{ url }}?tag=Завтрак">
             </a>
             <span class="tags__label">{{ tag.title }}</span>
         </li>

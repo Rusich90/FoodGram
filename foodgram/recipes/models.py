@@ -18,18 +18,13 @@ class Ingredient(models.Model):
     title = models.CharField(max_length=128)
     dimension = models.CharField(max_length=16)
 
-    def __str__(self):
-        return self.title
-
-
-class RecipeIngredient(models.Model):
-    ingredient = models.ForeignKey(Ingredient, on_delete=models.DO_NOTHING)
-    amount = models.PositiveIntegerField(validators=(
-                                   MinValueValidator(1),
-                                   MaxValueValidator(10000)))
+    class Meta:
+        ordering = ('title', )
+        verbose_name = 'ингредиент'
+        verbose_name_plural = 'ингредиенты'
 
     def __str__(self):
-        return self.ingredient.title
+        return f'{self.title}, {self.dimension}'
 
 
 class Recipe(models.Model):
@@ -37,9 +32,10 @@ class Recipe(models.Model):
                                related_name='recipes')
     title = models.CharField(max_length=256)
     description = models.TextField()
-    ingredients = models.ManyToManyField(RecipeIngredient)
-    tag = models.ForeignKey(Tag, on_delete=models.DO_NOTHING,
-                            related_name='recipes')
+    ingredients = models.ManyToManyField(Ingredient,
+                                         related_name='recipes',
+                                         through='RecipeIngredient')
+    tag = models.ManyToManyField(Tag, related_name='recipes')
     cooking_time = models.PositiveIntegerField(validators=(
                                    MinValueValidator(1),
                                    MaxValueValidator(2000)))
@@ -54,3 +50,42 @@ class Recipe(models.Model):
 
     def __str__(self):
         return self.title
+
+    class Meta:
+        ordering = ['-pub_date']
+
+
+class RecipeIngredient(models.Model):
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE,
+                               related_name='recipe_inridients')
+    ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
+    amount = models.PositiveIntegerField(validators=(
+                                   MinValueValidator(1),
+                                   MaxValueValidator(10000)))
+
+    def __str__(self):
+        return self.ingredient.title
+
+
+class Purchase(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE,
+                             related_name='purchases')
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE,
+                             related_name='purchases')
+
+
+class Favorite(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE,
+                             related_name='favorites')
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE,
+                             related_name='favorites')
+
+
+class Subscription(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE,
+                             related_name='follower')
+    author = models.ForeignKey(User, on_delete=models.CASCADE,
+                                  related_name='following')
+
+    class Meta:
+        unique_together = ['user', 'author']

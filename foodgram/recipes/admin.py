@@ -23,7 +23,7 @@ class RecipeIngredientAdmin(admin.ModelAdmin):
 
 
 class RecipeAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'title', 'author', 'tag',
+    list_display = ('pk', 'title', 'author',
                     'cooking_time', 'pub_date',)
     search_fields = ('title',)
     list_filter = ('pub_date',)
