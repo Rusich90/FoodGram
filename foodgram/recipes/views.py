@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import ListView
-from .models import Recipe
+from .models import Recipe, User
 from .models import Tag
 from urllib.parse import unquote
 
@@ -24,19 +24,14 @@ class IndexView(ListView):
 
 
 class SubscriptionsView(ListView):
-    # model = Recipe
     template_name = 'myFollow.html'
     paginate_by = 6
 
     def get_queryset(self):
-        object_list = Recipe.objects.filter(
-            author__following__user=self.request.user)
+        object_list = User.objects.filter(
+            following__user=self.request.user)
+        print(object_list)
         return object_list
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['tag_list'] = Tag.objects.all()
-        return context
 
 
 class FavoriteView(ListView):
