@@ -16,7 +16,7 @@
         </div>
         <div class="card-list">
             {% for recipe in object_list %}
-                {% include "includes/card_recipe.html" with recipe=recipe %}
+                {% include "includes/card_recipe.html" %}
             {% endfor %}
         </div>
         {% if page.has_other_pages %}
