@@ -21,12 +21,7 @@ class IndexView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.request.user.is_authenticated:
-            user = self.request.user
             context['tag_list'] = Tag.objects.all()
-            context['subscription_list'] = Subscription.objects.filter(
-                user=user)
-            context['favorite_recipes'] = Recipe.objects.filter(
-                favorites__user=user)
         return context
 
 
