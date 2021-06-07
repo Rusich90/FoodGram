@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Tag, Ingredient, RecipeIngredient, Recipe, Favorite, Subscription
+from .models import Tag, Ingredient, RecipeIngredient, Recipe, Favorite, Subscription, Purchase
 
 
 class TagAdmin(admin.ModelAdmin):
@@ -44,10 +44,17 @@ class SubscriptionAdmin(admin.ModelAdmin):
     empty_value_display = '-пусто-'
 
 
+class PurchaseAdmin(admin.ModelAdmin):
+    list_display = ('pk', 'user', 'recipe')
+    search_fields = ('user',)
+    list_filter = ('recipe',)
+    empty_value_display = '-пусто-'
+
+
 admin.site.register(Tag, TagAdmin)
 admin.site.register(Ingredient, IngredientAdmin)
 admin.site.register(RecipeIngredient, RecipeIngredientAdmin)
 admin.site.register(Recipe, RecipeAdmin)
 admin.site.register(Subscription, SubscriptionAdmin)
 admin.site.register(Favorite, FavoriteAdmin)
-
+admin.site.register(Purchase, PurchaseAdmin)
