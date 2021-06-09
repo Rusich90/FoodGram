@@ -9,6 +9,7 @@ User = get_user_model()
 class Tag(models.Model):
     title = models.CharField(max_length=16)
     color = models.CharField(max_length=16)
+    name = models.CharField(max_length=16, blank=True, null=True)
 
     def __str__(self):
         return self.title

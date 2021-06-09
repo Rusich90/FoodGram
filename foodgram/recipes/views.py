@@ -12,10 +12,10 @@ class IndexView(ListView):
     paginate_by = 6
 
     def get_queryset(self):
-        tag = self.kwargs.get('tag', )
         object_list = Recipe.objects.all()
-        if tag:
-            object_list = object_list.filter(title__icontains=tag)
+        if self.request.GET.get('tag'):
+            tag = self.request.GET['tag'].split(',')
+            object_list = object_list.filter(tag__name__in=tag).distinct()
         return object_list
 
     def get_context_data(self, **kwargs):

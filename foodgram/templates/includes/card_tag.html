@@ -1,9 +1,17 @@
 <ul class="tags">
     {% for tag in tag_list %}
         <li class="tags__item">
-            <a id="{{ tag.title }}" class="tags__checkbox tags__checkbox_style_{{ tag.color }}
-                {% if tag.title in request.GET %}tags__checkbox_active{% endif %}"
-                href="{{ url }}?tag=Завтрак">
+            <a id="{{ tag.id }}" class="tags__checkbox tags__checkbox_style_{{ tag.color }}
+                {% if tag.name in request.GET.tag %}tags__checkbox_active{% endif %}"
+                {% if request.GET.tag %}
+                    {% if tag.name in request.GET.tag %}
+                        href="{{ request.path }}">
+                    {% else %}
+                        href="{{ request.get_full_path }},{{ tag.name }}">
+                    {% endif %}
+                {% else %}
+                        href="{{ request.path }}?tag={{ tag.name }}">
+                {% endif %}
             </a>
             <span class="tags__label">{{ tag.title }}</span>
         </li>
