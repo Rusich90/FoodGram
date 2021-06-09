@@ -20,8 +20,7 @@ class IndexView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        if self.request.user.is_authenticated:
-            context['tag_list'] = Tag.objects.all()
+        context['tag_list'] = Tag.objects.all()
         return context
 
 
@@ -30,10 +29,10 @@ class AuthorView(IndexView):
 
     def get_queryset(self):
         author = get_object_or_404(User, username=self.kwargs['username'])
-        tag = self.kwargs.get('tag', )
         object_list = Recipe.objects.filter(author=author)
-        if tag:
-            object_list = object_list.filter(title__icontains=tag)
+        if self.request.GET.get('tag'):
+            tag = self.request.GET['tag'].split(',')
+            object_list = object_list.filter(tag__name__in=tag).distinct()
         return object_list
 
     def get_context_data(self, **kwargs):
@@ -43,9 +42,8 @@ class AuthorView(IndexView):
         return context
 
 
-class SubscriptionsView(ListView):
+class SubscriptionsView(IndexView):
     template_name = 'myFollow.html'
-    paginate_by = 6
 
     def get_queryset(self):
         object_list = User.objects.filter(
@@ -53,21 +51,16 @@ class SubscriptionsView(ListView):
         return object_list
 
 
-class FavoriteView(ListView):
+class FavoriteView(IndexView):
     template_name = 'favorite.html'
-    paginate_by = 6
 
     def get_queryset(self):
         object_list = Recipe.objects.filter(
             favorites__user=self.request.user)
+        if self.request.GET.get('tag'):
+            tag = self.request.GET['tag'].split(',')
+            object_list = object_list.filter(tag__name__in=tag).distinct()
         return object_list
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['tag_list'] = Tag.objects.all()
-        context['favorite_recipes'] = Recipe.objects.filter(
-            favorites__user=self.request.user)
-        return context
 
 
 @login_required
