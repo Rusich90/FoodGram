@@ -58,8 +58,9 @@ class Recipe(models.Model):
 
 class RecipeIngredient(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE,
-                               related_name='recipe_inridients')
-    ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
+                               related_name='recipe_ingredients')
+    ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE,
+                                   related_name='recipe_ingredients')
     amount = models.PositiveIntegerField(validators=(
                                    MinValueValidator(1),
                                    MaxValueValidator(10000)))
