@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 import json
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from .models import Recipe, User, Favorite, Subscription
 from .models import Tag
 
@@ -61,6 +61,11 @@ class FavoriteView(IndexView):
             tag = self.request.GET['tag'].split(',')
             object_list = object_list.filter(tag__name__in=tag).distinct()
         return object_list
+
+
+class RecipeView(DetailView):
+    model = Recipe
+    template_name = 'singlePage.html'
 
 
 @login_required

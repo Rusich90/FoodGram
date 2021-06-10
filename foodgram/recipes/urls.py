@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import IndexView, SubscriptionsView, FavoriteView, favorite_add, favorite_remove, AuthorView
+from .views import IndexView, SubscriptionsView, FavoriteView, favorite_add, favorite_remove, AuthorView, RecipeView
 
 
 urlpatterns = [
@@ -9,4 +9,5 @@ urlpatterns = [
     path('favorites/<int:recipe_id>', favorite_remove, name='removeFavorite'),
     path('favorites', favorite_add, name='addFavorite'),
     path('<str:username>/', AuthorView.as_view(), name='profile'),
+    path('recipe/<str:pk>/', RecipeView.as_view(), name='recipe-detail'),
 ]

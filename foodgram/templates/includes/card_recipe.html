@@ -3,10 +3,10 @@
 <div class="card" data-id="{{ recipe.id }}">
     {% load thumbnail %}
     {% thumbnail recipe.image "600x500" crop="center" upscale=True as im %}
-        <a href="*" class="link"><img src="{{ im.url }}" alt="Нет изображения" class="card__image"></a>
+        <a href="{% url 'recipe-detail' recipe.id %}" class="link"><img src="{{ im.url }}" alt="Нет изображения" class="card__image"></a>
     {% endthumbnail %}
     <div class="card__body">
-        <a class="card__title link" href="*">{{ recipe.title }}</a>
+        <a class="card__title link" href="{% url 'recipe-detail' recipe.id %}">{{ recipe.title }}</a>
         <ul class="card__items">
             {% for tag in recipe.tag.all %}
                 <li class="card__item"><span class="badge badge_style_{{ tag.color }}">{{ tag.title }}</span></li>
