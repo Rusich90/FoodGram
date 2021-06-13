@@ -86,3 +86,22 @@ def favorite_remove(request, recipe_id):
     favorite_recipe.delete()
     return JsonResponse({"success": True})
 
+
+@login_required
+def subscription_add(request):
+    author_id = json.loads(request.body).get("id")
+    author = get_object_or_404(User, id=author_id)
+    user = request.user
+    subscription = Subscription.objects.create(user=user, author=author)
+    subscription.save
+    return JsonResponse({"success": True})
+
+
+@login_required
+def subscription_remove(request, author_id):
+    author = get_object_or_404(User, id=author_id)
+    user = request.user
+    subscription = Subscription.objects.get(user=user, author=author)
+    subscription.delete()
+    return JsonResponse({"success": True})
+
