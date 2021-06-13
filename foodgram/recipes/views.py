@@ -3,7 +3,7 @@ import json
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, DetailView
-from .models import Recipe, User, Favorite, Subscription
+from .models import Recipe, User, Favorite, Subscription, Purchase
 from .models import Tag
 
 
@@ -103,5 +103,24 @@ def subscription_remove(request, author_id):
     user = request.user
     subscription = Subscription.objects.get(user=user, author=author)
     subscription.delete()
+    return JsonResponse({"success": True})
+
+
+@login_required
+def purchase_add(request):
+    recipe_id = json.loads(request.body).get("id")
+    recipe = get_object_or_404(Recipe, id=recipe_id)
+    user = request.user
+    purchase = Purchase.objects.create(user=user, recipe=recipe)
+    purchase.save
+    return JsonResponse({"success": True})
+
+
+@login_required
+def purchase_remove(request, recipe_id):
+    recipe = get_object_or_404(Recipe, id=recipe_id)
+    user = request.user
+    purchase = Purchase.objects.get(user=user, recipe=recipe)
+    purchase.delete()
     return JsonResponse({"success": True})
 
