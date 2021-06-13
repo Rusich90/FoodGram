@@ -37,7 +37,7 @@
                 <div class="single-card__items single-card__items_column">
                     <p class="single-card__text"><span class="icon-time"></span> {{ object.cooking_time }} мин.</p>
                     <ul class="single-card__items">
-                        <li class="single-card__item"><p class="single-card__text"><span class="icon-user"></span> {{ object.author.username}}</p></li>
+                        <li class="single-card__item"><p class="single-card__text"><span class="icon-user"></span>  <a href="{% url 'profile' object.author.username %}" style="color: black">{{ object.author.username }}</a></p></li>
                         {% if recipe.author == user %}
                             <li class="single-card__item">  <a style="margin-left: 2.5em" href="#" class="single-card__text">Редактировать рецепт</a></li>
                         {% endif %}
