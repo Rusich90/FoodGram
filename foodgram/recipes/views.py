@@ -1,9 +1,9 @@
 from django.contrib.auth.decorators import login_required
 import json
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, DetailView
-from .models import Recipe, User, Favorite, Subscription, Purchase
+from .models import Recipe, User, Favorite, Subscription, Purchase, RecipeIngredient
 from .models import Tag
 
 
@@ -60,6 +60,15 @@ class FavoriteView(IndexView):
         if self.request.GET.get('tag'):
             tag = self.request.GET['tag'].split(',')
             object_list = object_list.filter(tag__name__in=tag).distinct()
+        return object_list
+
+
+class PurchasesView(IndexView):
+    template_name = 'shopList.html'
+
+    def get_queryset(self):
+        object_list = Recipe.objects.filter(
+            purchases__user=self.request.user)
         return object_list
 
 
@@ -123,4 +132,17 @@ def purchase_remove(request, recipe_id):
     purchase = Purchase.objects.get(user=user, recipe=recipe)
     purchase.delete()
     return JsonResponse({"success": True})
+
+
+@login_required
+def shop_list(request):
+    purchases = RecipeIngredient.objects.filter(recipe__purchases__user=request.user)
+    purchases_dict = {}
+    for recipe in purchases:
+        if recipe.ingredient.title in purchases_dict.keys():
+            purchases_dict[recipe.ingredient.title] = purchases_dict[recipe.ingredient.title] + recipe.amount
+        else:
+            purchases_dict[recipe.ingredient.title] = recipe.amount
+    print(purchases_dict)
+    return HttpResponse(purchases_dict)
 
