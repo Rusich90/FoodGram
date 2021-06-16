@@ -1,16 +1,13 @@
-import io
 from django.contrib.auth.decorators import login_required
 import json
-from django.http import JsonResponse, FileResponse
-from django.shortcuts import render, get_object_or_404
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
 from django.views.generic import ListView, DetailView
-from .models import Recipe, User, Favorite, Subscription, Purchase, RecipeIngredient
+from .models import (Recipe, User, Favorite, Subscription,
+                     Purchase, RecipeIngredient)
 from .models import Tag
-from reportlab.pdfgen import canvas
-from reportlab.pdfbase import pdfmetrics
-from reportlab.pdfbase.ttfonts import TTFont
-import reportlab
-from django.conf import settings
+from .utils import create_pdf
+
 
 class IndexView(ListView):
     template_name = 'index.html'
@@ -148,26 +145,5 @@ def shop_list(request):
             purchases_dict[recipe.ingredient.title][0] = purchases_dict[recipe.ingredient.title][0] + recipe.amount
         else:
             purchases_dict[recipe.ingredient.title] = [recipe.amount, recipe.ingredient.dimension]
+    return create_pdf(purchases_dict)
 
-    buffer = io.BytesIO()
-    # Create the PDF object, using the buffer as its "file."
-    p = canvas.Canvas(buffer)
-    reportlab.rl_config.TTFSearchPath.append(
-        str(settings.BASE_DIR) + '/fonts')
-    pdfmetrics.registerFont(TTFont('FreeSans', '../fonts/FreeSans.ttf'))
-    p.setFont('FreeSans', 20)
-    p.drawString(250, 800, "FoodGram")
-    p.drawString(30, 750, "Список покупок:")
-    p.setFont('FreeSans', 16)
-    x = 710
-    for key, value in purchases_dict.items():
-        p.drawString(30, x, f" - {key} - {value[0]} {value[1]}")
-        x -= 30
-    # Close the PDF object cleanly, and we're done.
-    p.showPage()
-    p.save()
-
-    # FileResponse sets the Content-Disposition header so that browsers
-    # present the option to save the file.
-    buffer.seek(0)
-    return FileResponse(buffer, as_attachment=True, filename='Список покупок.pdf')
