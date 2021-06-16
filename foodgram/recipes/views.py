@@ -159,9 +159,9 @@ def shop_list(request):
     p.drawString(250, 800, "FoodGram")
     p.drawString(30, 750, "Список покупок:")
     p.setFont('FreeSans', 16)
-    x = 730
+    x = 710
     for key, value in purchases_dict.items():
-        p.drawString(30, x-20, f"\n{key} - {value[0]} {value[1]}.")
+        p.drawString(30, x, f" - {key} - {value[0]} {value[1]}")
         x -= 30
     # Close the PDF object cleanly, and we're done.
     p.showPage()
