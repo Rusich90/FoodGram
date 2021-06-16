@@ -2,11 +2,12 @@ from django.contrib.auth.decorators import login_required
 import json
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView
 from .models import (Recipe, User, Favorite, Subscription,
-                     Purchase, RecipeIngredient)
+                     Purchase, RecipeIngredient, Ingredient)
 from .models import Tag
 from .utils import create_pdf
+from .forms import RecipeForm
 
 
 class IndexView(ListView):
@@ -79,6 +80,12 @@ class RecipeView(DetailView):
     template_name = 'singlePage.html'
 
 
+class NewRecipeView(CreateView):
+    model = Recipe
+    template_name = 'formRecipe.html'
+    form_class = RecipeForm
+
+
 @login_required
 def favorite_add(request):
     recipe_id = json.loads(request.body).get("id")
@@ -147,3 +154,8 @@ def shop_list(request):
             purchases_dict[recipe.ingredient.title] = [recipe.amount, recipe.ingredient.dimension]
     return create_pdf(purchases_dict)
 
+
+def ingredients_search(request):
+    query = request.GET.get('query')
+    data = list(Ingredient.objects.filter(title__icontains=query).values('title', 'dimension'))
+    return JsonResponse(data, safe=False)
