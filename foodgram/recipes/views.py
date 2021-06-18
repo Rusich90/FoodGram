@@ -1,12 +1,12 @@
 from django.contrib.auth.decorators import login_required
 import json
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import ListView, DetailView, CreateView
 from .models import (Recipe, User, Favorite, Subscription,
                      Purchase, RecipeIngredient, Ingredient)
 from .models import Tag
-from .utils import create_pdf
+from .utils import create_pdf, save_recipe
 from .forms import RecipeForm
 
 
@@ -80,10 +80,22 @@ class RecipeView(DetailView):
     template_name = 'singlePage.html'
 
 
-class NewRecipeView(CreateView):
-    model = Recipe
-    template_name = 'formRecipe.html'
-    form_class = RecipeForm
+# class NewRecipeView(CreateView):
+#     model = Recipe
+#     template_name = 'formRecipe.html'
+#     form_class = RecipeForm
+
+@login_required
+def new_recipe(request):
+    form = RecipeForm(request.POST or None, files=request.FILES or None)
+    if form.is_valid():
+        save_recipe(request, form)
+        return redirect("index")
+    print(form['tag'])
+    return render(request,
+                  "formRecipe.html",
+                  {"form": form}
+                  )
 
 
 @login_required

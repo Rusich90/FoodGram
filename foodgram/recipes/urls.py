@@ -2,12 +2,12 @@ from django.urls import path
 from .views import (IndexView, SubscriptionsView, FavoriteView, favorite_add,
                     favorite_remove, AuthorView, RecipeView, subscription_add,
                     subscription_remove, purchase_add, purchase_remove,
-                    PurchasesView, shop_list, NewRecipeView, ingredients_search)
+                    PurchasesView, shop_list, new_recipe, ingredients_search)
 
 
 urlpatterns = [
     path('', IndexView.as_view(), name='index'),
-    path('new/', NewRecipeView.as_view(), name='new_recipe'),
+    path('new/', new_recipe, name='new_recipe'),
     path('ingredients', ingredients_search, name='ingredients_search'),
     path('subscriptions/', SubscriptionsView.as_view(), name='follow_index'),
     path('my-follow/', FavoriteView.as_view(), name='favorite_recipes'),
