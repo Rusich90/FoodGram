@@ -36,23 +36,13 @@
                 <p class="form__label">Теги</p>
                 <div class="form__field-group">
                     <div class="tags">
-                        {% if recipe %}
-                            {% for tag in tag_list %}
-                                <div class="tags__item">
-                                    <input type="checkbox" name="tags" value="{{ tag.id }}" id="id_{{ tag.name }}"
-                                           class="tags__checkbox tags__checkbox_style_{{ tag.color}}" {% if tag in recipe.tags.all %}checked{% endif %}>
-                                    <label for="id_{{ tag.id }}" class="tags__label">{{ tag.name }}</label>
-                                </div>
-                            {% endfor %}
-                        {% else %}
-                            {% for tag in form.fields.tag.choices.queryset %}
-                                <div class="tags__item">
-                                    <input type="checkbox" name="tags" id="id_{{ tag.name }}" class="tags__checkbox tags__checkbox_style_{{ tag.color }}" value="{{ tag.id }}"
-                                    {% if tag.id in form.tag.value %} checked {% endif %}>
-                                    <label for="id_{{ tag.name }}" class="tags__label">{{ tag.title }}</label>
-                                </div>
-                            {% endfor %}
-                        {% endif %}
+                        {% for tag in form.fields.tag.choices.queryset %}
+                            <div class="tags__item">
+                                <input type="checkbox" name="tag" id="id_{{ tag.name }}" class="tags__checkbox tags__checkbox_style_{{ tag.color }}" value="{{ tag.id }}"
+                                {% if tag.id in form.tag.value %} checked {% endif %}>
+                                <label for="id_{{ tag.name }}" class="tags__label">{{ tag.title }}</label>
+                            </div>
+                        {% endfor %}
                         </div>
 
                         <span class="form__error">{{ form.tag.errors }}</span>
@@ -109,11 +99,11 @@
                 </div>
             </div>
             <div class="form__group">
-                <span class="form__label">Загрузить фото</span>
+                <label for="{{ form.image.id_for_label }}" class="form__label">Загрузить фото</label>
                 <div class="form__field-group">
                     {{ form.image|addclass:"form__file-button" }}
                         {% if form.errors %}
-                            {% for errors in field.errors %}
+                            {% for errors in image.errors %}
                                 <span class="form__error">{{ error|escape}}</span>
                             {% endfor %}
                         {% endif %}

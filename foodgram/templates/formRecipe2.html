@@ -103,3 +103,11 @@
 <script src="{% static 'formRecipe.js' %}"></script>
 
 {% endblock %}
+
+                            {% for tag in tag_list %}
+                                <div class="tags__item">
+                                    <input type="checkbox" name="tags" value="{{ tag.id }}" id="id_{{ tag.name }}"
+                                           class="tags__checkbox tags__checkbox_style_{{ tag.color}}" {% if tag in recipe.tags.all %}checked{% endif %}>
+                                    <label for="id_{{ tag.id }}" class="tags__label">{{ tag.name }}</label>
+                                </div>
+                            {% endfor %}

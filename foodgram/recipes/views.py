@@ -91,7 +91,6 @@ def new_recipe(request):
     if form.is_valid():
         save_recipe(request, form)
         return redirect("index")
-    print(form['tag'])
     return render(request,
                   "formRecipe.html",
                   {"form": form}
@@ -165,6 +164,20 @@ def shop_list(request):
         else:
             purchases_dict[recipe.ingredient.title] = [recipe.amount, recipe.ingredient.dimension]
     return create_pdf(purchases_dict)
+
+
+# def download(request):
+#     # The request loads the ingredients of the selected recipes.
+#     # And their amount.
+#     data = request.user.purchases.select_related(
+#                 'item'
+#             ).order_by(
+#                 'item__ingredients__name'
+#             ).values(
+#                 'item__ingredients__name', 'item__ingredients__unit'
+#             ).annotate(amount=Sum('item__recipe_ingredients__amount')).all()
+#
+#     return download_pdf(data)
 
 
 def ingredients_search(request):

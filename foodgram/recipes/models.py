@@ -45,9 +45,7 @@ class Recipe(models.Model):
     image = models.ImageField(
         upload_to='recipes/',
         verbose_name='Изображение',
-        help_text='Загрузите изображение (необязательно)',
-        blank=True,
-        null=True)
+        help_text='Загрузите изображение')
 
     def __str__(self):
         return self.title
