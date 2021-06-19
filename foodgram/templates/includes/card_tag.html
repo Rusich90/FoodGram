@@ -1,19 +1,13 @@
+{% load recipe_filters %}
+
 <ul class="tags">
+    {% with filter_values=request.GET|get_filter_values %}
     {% for tag in tag_list %}
         <li class="tags__item">
-            <a id="{{ tag.id }}" class="tags__checkbox tags__checkbox_style_{{ tag.color }}
-                {% if tag.name in request.GET.tag %}tags__checkbox_active{% endif %}"
-                {% if request.GET.tag %}
-                    {% if tag.name in request.GET.tag %}
-                        href="{{ request.path }}">
-                    {% else %}
-                        href="{{ request.get_full_path }},{{ tag.name }}">
-                    {% endif %}
-                {% else %}
-                        href="{{ request.path }}?tag={{ tag.name }}">
-                {% endif %}
-            </a>
+            <a id="{{ tag.name }}" class="tags__checkbox tags__checkbox_style_{{ tag.color }}
+            {% if tag.name in filter_values %} tags__checkbox_active {% endif %}" href="?{{request.GET|get_filter_link:tag}}"></a>
             <span class="tags__label">{{ tag.title }}</span>
         </li>
     {% endfor %}
+    {% endwith %}
 </ul>

@@ -17,3 +17,29 @@ def is_favorite(recipe, user):
 @register.filter
 def is_purchase(recipe, user):
     return Purchase.objects.filter(user=user, recipe=recipe).exists()
+
+
+@register.filter
+def get_filter_values(get_params):
+    return get_params.getlist("tags")
+
+
+@register.filter
+def get_filter_link(get_params, tag):
+    tags: list = get_params.getlist("tags")
+    if tag.name in tags:
+        tags.remove(tag.name)
+    else:
+        tags.append(tag.name)
+
+    if tags:
+        result = "tags=" + "&tags=".join(tags)
+        return result
+
+
+@register.filter
+def get_tags(get_params):
+    tags = get_params.getlist("tags")
+    if tags:
+        result = "tags=" + "&tags=".join(tags)
+        return result
