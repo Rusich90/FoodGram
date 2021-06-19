@@ -16,8 +16,8 @@
                     {% include 'includes/card_user.html' with author=author %}
                 {% endfor %}
             </div>
-                {% if page.has_other_pages %}
-                    {% include "includes/paginator.html" with items=page paginator=paginator %}
+                {% if is_paginated %}
+                    {% include "includes/paginator.html" with items=page_obg paginator=paginator %}
                 {% endif %}
             {% else %}
                 <title>У вас отсутствуют подписки</title>
