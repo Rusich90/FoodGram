@@ -1,0 +1,18 @@
+{% extends "includes/base.html" %}
+{% load static %}
+{% load user_filters %}
+{% block title %}{% if recipe %}Редактирование рецепта{% else %}Создание рецепта{% endif %}{% endblock %}
+{% block css_block %}
+    <link rel="stylesheet" href="{% static 'pages/form.css' %}">
+{% endblock %}
+
+{% block content %}
+<main class="main container">
+    <form method="post">{% csrf_token %}
+
+    <h2>Вы уверены что хотите удалить рецепт <big><strong>{{ object.title }}</strong></big>?</h2>
+
+        <button type="submit" class="button button_style_blue">Удалить</button>
+    </form>
+</main>
+{% endblock %}

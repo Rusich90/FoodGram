@@ -2,12 +2,13 @@ from django.contrib.auth.decorators import login_required
 import json
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import (Recipe, User, Favorite, Subscription,
                      Purchase, RecipeIngredient, Ingredient)
 from .models import Tag
-from .utils import create_pdf, save_recipe
+from .utils import create_pdf, save_recipe, edit_recipe
 from .forms import RecipeForm
+from django.urls import reverse_lazy
 
 
 class IndexView(ListView):
@@ -80,21 +81,44 @@ class RecipeView(DetailView):
     template_name = 'singlePage.html'
 
 
-# class NewRecipeView(CreateView):
-#     model = Recipe
-#     template_name = 'formRecipe.html'
-#     form_class = RecipeForm
+class NewRecipeView(CreateView):
+    model = Recipe
+    template_name = 'formRecipe.html'
+    form_class = RecipeForm
+
+    def form_valid(self, form):
+        save_recipe(self.request, form)
+        return redirect("index")
+
+    def form_invalid(self, form):
+        return render(self.request,
+                      "formRecipe.html",
+                      {"form": form}
+                      )
+
 
 @login_required
-def new_recipe(request):
-    form = RecipeForm(request.POST or None, files=request.FILES or None)
-    if form.is_valid():
-        save_recipe(request, form)
+def recipe_edit(request, pk):
+    recipe = get_object_or_404(Recipe, id=pk)
+    if recipe.author != request.user:
         return redirect("index")
-    return render(request,
-                  "formRecipe.html",
-                  {"form": form}
-                  )
+    form = RecipeForm(request.POST or None,
+                      files=request.FILES or None,
+                      instance=recipe)
+    if form.is_valid():
+        edit_recipe(request, form, instance=recipe)
+        return redirect("recipe-detail", pk=pk)
+    return render(request, "formRecipe.html", {
+        "form": form,
+        "recipe": recipe,
+        }
+    )
+
+
+class DeleteRecipeView(DeleteView):
+    model = Recipe
+    success_url = reverse_lazy('index')
+    template_name = 'recipe_confirm_delete.html'
 
 
 @login_required

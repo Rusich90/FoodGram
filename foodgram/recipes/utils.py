@@ -66,3 +66,12 @@ def save_recipe(request, form):
 
     except IntegrityError:
         raise HttpResponseBadRequest
+
+
+def edit_recipe(request, form, instance):
+    try:
+        with transaction.atomic():
+            RecipeIngredient.objects.filter(recipe=instance).delete()
+            return save_recipe(request, form)
+    except IntegrityError:
+        raise HttpResponseBadRequest
