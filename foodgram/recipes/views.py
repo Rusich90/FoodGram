@@ -19,7 +19,6 @@ class IndexView(ListView):
         object_list = Recipe.objects.all()
         if self.request.GET.get('tags'):
             tag = self.request.GET.getlist('tags')
-            print(self.request.GET.getlist('tags'))
             object_list = object_list.filter(tag__name__in=tag).distinct()
         return object_list
 
@@ -35,8 +34,8 @@ class AuthorView(IndexView):
     def get_queryset(self):
         author = get_object_or_404(User, username=self.kwargs['username'])
         object_list = Recipe.objects.filter(author=author)
-        if self.request.GET.get('tag'):
-            tag = self.request.GET['tag'].split(',')
+        if self.request.GET.get('tags'):
+            tag = self.request.GET.getlist('tags')
             object_list = object_list.filter(tag__name__in=tag).distinct()
         return object_list
 
@@ -62,8 +61,8 @@ class FavoriteView(IndexView):
     def get_queryset(self):
         object_list = Recipe.objects.filter(
             favorites__user=self.request.user)
-        if self.request.GET.get('tag'):
-            tag = self.request.GET['tag'].split(',')
+        if self.request.GET.get('tags'):
+            tag = self.request.GET.getlist('tags')
             object_list = object_list.filter(tag__name__in=tag).distinct()
         return object_list
 

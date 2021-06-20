@@ -1,5 +1,6 @@
 {% load static %}
 {% load thumbnail %}
+{% load recipe_filters %}
 <div class="card-user" data-author="{{ author.id }}">
     <div class="card-user__header">
         <h2 class="card-user__title">{{ author }}</h2>
@@ -27,6 +28,10 @@
         </ul>
     </div>
     <div class="card-user__footer">
-        <button class="button button_style_light-blue button_size_auto" name="subscribe">Отписаться</button>
+        {% if author|is_subscribe:user %}
+            <button class="button button_style_light-blue button_size_auto" name="subscribe">Отписаться</button>
+        {% else %}
+            <button class="button button_style_light-blue button_size_auto" name="subscribe" data-out>Подписаться на автора</button>
+        {% endif %}
     </div>
 </div>
