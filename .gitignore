@@ -103,7 +103,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
+foodgram/.env
 .venv
 env/
 venv/
@@ -130,3 +130,4 @@ dmypy.json
 .pyre/
 .idea/
 media/
+.env

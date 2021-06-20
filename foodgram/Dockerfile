@@ -18,4 +18,4 @@ RUN pip install -r requirements.txt
 RUN python manage.py collectstatic --no-input
 
 # при старте контейнера выполнить runserver
-CMD gunicorn foodgram.wsgi:application --bind 0.0.0.0:8000
+CMD python manage.py migrate && gunicorn foodgram.wsgi -b 0.0.0.0:8000
