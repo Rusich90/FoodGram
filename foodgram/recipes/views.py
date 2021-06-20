@@ -2,13 +2,14 @@ from django.contrib.auth.decorators import login_required
 import json
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView, CreateView, DeleteView
 from .models import (Recipe, User, Favorite, Subscription,
                      Purchase, RecipeIngredient, Ingredient)
 from .models import Tag
 from .utils import create_pdf, save_recipe, edit_recipe
 from .forms import RecipeForm
 from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 class IndexView(ListView):
@@ -46,7 +47,7 @@ class AuthorView(IndexView):
         return context
 
 
-class SubscriptionsView(IndexView):
+class SubscriptionsView(LoginRequiredMixin, IndexView):
     template_name = 'myFollow.html'
 
     def get_queryset(self):
@@ -55,7 +56,7 @@ class SubscriptionsView(IndexView):
         return object_list
 
 
-class FavoriteView(IndexView):
+class FavoriteView(LoginRequiredMixin, IndexView):
     template_name = 'favorite.html'
 
     def get_queryset(self):
@@ -67,7 +68,7 @@ class FavoriteView(IndexView):
         return object_list
 
 
-class PurchasesView(IndexView):
+class PurchasesView(LoginRequiredMixin, IndexView):
     template_name = 'shopList.html'
 
     def get_queryset(self):
@@ -81,7 +82,7 @@ class RecipeView(DetailView):
     template_name = 'singlePage.html'
 
 
-class NewRecipeView(CreateView):
+class NewRecipeView(LoginRequiredMixin, CreateView):
     model = Recipe
     template_name = 'formRecipe.html'
     form_class = RecipeForm
@@ -116,7 +117,7 @@ def recipe_edit(request, pk):
     )
 
 
-class DeleteRecipeView(DeleteView):
+class DeleteRecipeView(LoginRequiredMixin, DeleteView):
     model = Recipe
     success_url = reverse_lazy('index')
     template_name = 'recipe_confirm_delete.html'
@@ -189,20 +190,6 @@ def shop_list(request):
         else:
             purchases_dict[recipe.ingredient.title] = [recipe.amount, recipe.ingredient.dimension]
     return create_pdf(purchases_dict)
-
-
-# def download(request):
-#     # The request loads the ingredients of the selected recipes.
-#     # And their amount.
-#     data = request.user.purchases.select_related(
-#                 'item'
-#             ).order_by(
-#                 'item__ingredients__name'
-#             ).values(
-#                 'item__ingredients__name', 'item__ingredients__unit'
-#             ).annotate(amount=Sum('item__recipe_ingredients__amount')).all()
-#
-#     return download_pdf(data)
 
 
 def ingredients_search(request):
