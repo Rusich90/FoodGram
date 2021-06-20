@@ -210,3 +210,16 @@ def ingredients_search(request):
     query = request.GET.get('query')
     data = list(Ingredient.objects.filter(title__icontains=query).values('title', 'dimension'))
     return JsonResponse(data, safe=False)
+
+
+def page_not_found(request, exception):
+    return render(
+        request,
+        "misc/404.html",
+        {"path": request.path},
+        status=404
+    )
+
+
+def server_error(request):
+    return render(request, "misc/500.html", status=500)
