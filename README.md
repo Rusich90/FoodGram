@@ -11,6 +11,7 @@
 * JavaScript
 * Linux
 * Gunicorn, NGINX
+* Docker, Docker-compose
 
 Возможности:
 
@@ -25,15 +26,20 @@
 ## Установка 
 Клонируем репозиторий на локальную машину:
 
-```$ git clone https://github.com/Rusich90/yatube.git```
+```$ git clone https://github.com/Rusich90/FoodGram.git```
 
- Создаем виртуальное окружение:
+ Переходим в папку проекта:
  
- ```$ python -m venv venv```
+ ```$ cd FoodGram/foodgram```
  
-  Активируем виртуальное окружение
+  Создаём файл .env с секретными данными для доступа к Postgre 
  
- ```$ source venv/Scripts/activate```
+ ```$ DB_ENGINE=django.db.backends.postgresql # указываем, что работаем с postgresql
+      DB_NAME=postgres # имя базы данных
+      POSTGRES_USER=<your_login> # логин для подключения к базе данных (установите свой)
+      POSTGRES_PASSWORD=<your_password> # пароль для подключения к БД (установите свой)
+      DB_HOST=db # название сервиса (контейнера)
+      DB_PORT=5432 # порт для подключения к БД```
  
  Переходм в папку polls
  
