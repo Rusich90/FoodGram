@@ -34,12 +34,14 @@
  
   Создаём файл .env с секретными данными для доступа к Postgre 
  
- ```$ DB_ENGINE=django.db.backends.postgresql # указываем, что работаем с postgresql
+ ```
+      DB_ENGINE=django.db.backends.postgresql # указываем, что работаем с postgresql
       DB_NAME=postgres # имя базы данных
       POSTGRES_USER=<your_login> # логин для подключения к базе данных (установите свой)
       POSTGRES_PASSWORD=<your_password> # пароль для подключения к БД (установите свой)
       DB_HOST=db # название сервиса (контейнера)
-      DB_PORT=5432 # порт для подключения к БД```
+      DB_PORT=5432 # порт для подключения к БД
+  ```
  
  Переходм в папку polls
  
