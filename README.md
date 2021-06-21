@@ -9,6 +9,7 @@
 * PostgreSQL
 * HTML
 * JavaScript
+* CSS
 * Linux
 * Gunicorn, NGINX
 * Docker, Docker-compose
